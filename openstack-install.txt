@@ -1,0 +1,60 @@
+Paste the local.conf file here for devstack installation:
+
+ 
+
+ 
+
+DATABASE_PASSWORD=123456  
+RABBIT_PASSWORD=123456  
+SERVICE_TOKEN=123456  
+SERVICE_PASSWORD=123456  
+ADMIN_PASSWORD=123456  
+  
+disable_service n-net  
+enable_service q-svc  
+enable_service q-agt  
+enable_service q-dhcp  
+enable_service q-l3  
+enable_service q-meta  
+enable_service q-lbaas  
+enable_service q-vpn  
+  
+DEST=/opt/devstack/
+  
+DATA_DIR=$DEST/data  
+SERVICE_DIR=$DEST  
+  
+LOGDIR=/opt/devstack/logs/
+LOGFILE=$LOGDIR/stack.sh.log  
+VERBOSE=True  
+LOG_COLOR=True  
+SCREEN_LOGDIR=$LOGDIR/screens  
+  
+Q_PLUGIN=ml2  
+#ENABLE_TENANT_VLANS=True  
+
+Q_AGENT=openvswitch
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
+ENABLE_TENANT_TUNNELS=True
+Q_ML2_TENANT_NETWORK_TYPE=gre
+  
+LOGDAYS=1  
+  
+RECLONE=False
+OFFLINE=True  
+  
+GIT_BASE="http://github.com"  
+  
+IMAGE_URLS="http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img"
+  
+# Enable Heat  
+enable_service heat h-api h-api-cfn h-api-cw h-eng  
+  
+# Enable Murano  
+enable_service murano murano-api murano-engine  
+
+
+# magnum requires the following to be set correctly
+
+enable_plugin magnum https://git.openstack.org/openstack/magnum
+enable_plugin sahara git://git.openstack.org/openstack/sahara

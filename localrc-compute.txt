@@ -1,0 +1,56 @@
+[[local|localrc]]
+ENABLED_SERVICES="n-cpu,neutron,q-agt,-rabbit"
+SERVICE_HOST={MASTER_IP}
+ADMIN_PASSWORD=secret
+DATABASE_PASSWORD=$ADMIN_PASSWORD
+RABBIT_PASSWORD=$ADMIN_PASSWORD
+SERVICE_PASSWORD=$ADMIN_PASSWORD
+SERVICE_TOKEN=super-secret-admin-token
+VIRT_DRIVER=novadocker.virt.docker.DockerDriver
+HOST_IP={HOST_IP}
+MYSQL_HOST={MASTER_IP}
+Q_HOST={MASTER_IP}
+IMAGE_URLS=" "
+
+DEST=/opt/stack
+SERVICE_DIR=$DEST/status
+DATA_DIR=$DEST/data
+LOGFILE=$DEST/logs/stack.sh.log
+LOGDIR=$DEST/logs
+
+# The default fixed range (10.0.0.0/24) conflicted with an address
+# range I was using locally.
+FIXED_RANGE=10.254.1.0/24
+NETWORK_GATEWAY=10.254.1.1
+Q_PLUGIN=ml2
+Q_AGENT=openvswitch
+Q_ML2_PLUGIN_MECHANISM_DRIVERS=openvswitch
+ENABLE_TENANT_TUNNELS=True
+Q_ML2_TENANT_NETWORK_TYPE=gre
+
+# I am disabling horizon (because I rarely use the web ui)
+# and tempest in order to make the installer complete a
+# little faster.
+disable_service tempest
+
+# Introduce glance to docker images
+[[post-config|$GLANCE_API_CONF]]
+[DEFAULT]
+container_formats=ami,ari,aki,bare,ovf,ova,docker
+
+# Configure nova to use the nova-docker driver
+[[post-config|$NOVA_CONF]]
+[DEFAULT]
+compute_driver=novadocker.virt.docker.DockerDriver
+[oslo_messaging_rabbit]
+rabbit_userid=stackrabbit
+rabbit_password=secret
+rabbit_hosts={MASTER_IP}
+
+[[post-config|/$Q_PLUGIN_CONF_FILE]]
+[ml2]
+tenant_network_types=gre
+[oslo_messaging_rabbit]
+rabbit_userid=stackrabbit
+rabbit_password=secret
+rabbit_hosts={MASTER_IP}
