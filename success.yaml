@@ -1,0 +1,33 @@
+heat_template_version: 2013-05-23
+
+description: Simple template to deploy a single compute instance
+
+resources:
+
+  enable_service:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      group: ungrouped
+      config: {get_file: init_shell/enable-kubernetes.sh}
+
+  kubernetes_master_init:
+    type: OS::Heat::MultipartMime
+    properties:
+      parts:
+        - config: {get_resource: enable_service}
+
+  kubernetes:
+
+    type: OS::Nova::Server
+
+    properties:
+
+      key_name: key
+
+      image: kubernetes
+
+      flavor: m1.small
+
+      user_data_format: RAW
+
+      user_data: {get_resource: kubernetes_master_init}

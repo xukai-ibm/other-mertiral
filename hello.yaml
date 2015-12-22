@@ -1,0 +1,18 @@
+heat_template_version: 2013-05-23
+
+description: Simple template to deploy a single compute instance
+
+resources:
+
+  my_instance:
+
+    type: OS::Nova::Server
+
+    properties:
+
+      key_name: heat_key
+
+      image: kubernetes
+
+      flavor: m1.small
+
