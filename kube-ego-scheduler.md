@@ -13,3 +13,8 @@
 3) IBM EGO version：ibm-ego-3.2.0-354246.ibm.x86_64 should be installed.<br>
 4) All kubernetes code version 1.0.0 is nesessary.<br>
 
+<hr>
+
+####2、Usage<br>
+
+1) preparation<br>
