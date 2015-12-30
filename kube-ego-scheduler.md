@@ -30,3 +30,15 @@ export KUBERNETES_CONTRIB=ego
 make
 ```
 3)The binaries will be put in _output/local/bin soon<br>
+
+####3、Deploy<br>
+
+```Bash
+kube-apiserver  --etcd-servers=http://127.0.0.1:2379 --insecure-bind-address=0.0.0.0 --insecure-port=8080 --logtostderr=true --service-cluster-ip-range=10.200.20.0/24 --v=2 
+
+kube-controller-manager --logtostderr=true --master=http://127.0.0.1:8080 --v=2 
+
+kube-scheduler --master=http://127.0.0.1:8080 --v=2 --api-server=127.0.0.1:8080
+
+kubelet --address=0.0.0.0 --port=10250 --hostname_override=ego.localdomain --enable_server=true --v=0 --api-servers=http://127.0.0.1:8080 
+```
